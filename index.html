@@ -57,7 +57,7 @@
             padding: 16px;
             font-size: 18px;
             font-weight: 600;
-            color: #f59e0b; /* Cor laranja idêntica à foto */
+            color: #f59e0b;
             letter-spacing: 1px;
             margin-bottom: 16px;
             word-break: break-all;
@@ -85,7 +85,7 @@
         }
 
         .footer-text {
-            color: #ef4444;
+            color: #71717a;
             font-size: 12px;
             margin-top: 16px;
         }
@@ -97,58 +97,43 @@
         <div class="logo">📁 d10 Hub</div>
         <p class="subtitle">Cole esta chave no jogo para liberar o script!</p>
         
-        <!-- Onde a chave vai aparecer -->
-        <div class="key-box" id="key-display">Buscando ID...</div>
+        <!-- A chave aparece aqui direto -->
+        <div class="key-box" id="key-display">Gerando Key...</div>
         
-        <!-- Botão de copiar -->
         <button class="btn-copy" onclick="copiarKey()">📋 Copiar Key</button>
         
-        <p class="footer-text" id="status-text">Esta chave expira em 24h.</p>
+        <p class="footer-text">Esta chave muda automaticamente a cada 24h.</p>
     </div>
 
     <script>
-        // Pega o ?userid= que o Linkvertise envia na URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('userid');
-        let chaveGerada = "";
+        // Sistema simplificado baseado apenas na data do calendário
+        const data = new Date();
+        const dia = String(data.getDate()).padStart(2, '0');
+        const mes = String(data.getMonth() + 1).padStart(2, '0');
+        const dataFormatada = dia + mes;
 
-        if (userId) {
-            // Pega a data atual (Dia e Mês)
-            const data = new Date();
-            const dia = String(data.getDate()).padStart(2, '0');
-            const mes = String(data.getMonth() + 1).padStart(2, '0');
-            const dataFormatada = dia + mes;
+        // Chave estática diária idêntica à do script
+        const chaveGerada = `d10_key_${dataFormatada}`;
 
-            // Faz o mesmo cálculo matemático que o script do Roblox faz
-            const contaSecreta = (parseInt(userId) * 2) + 500;
-            chaveGerada = `d10_${contaSecreta}_${dataFormatada}`;
+        // Exibe direto na tela
+        document.getElementById('key-display').innerText = chaveGerada;
 
-            // Mostra a chave na tela
-            document.getElementById('key-display').innerText = chaveGerada;
-        } else {
-            document.getElementById('key-display').innerText = "Erro: Sem ID!";
-            document.getElementById('key-display').style.color = "#ef4444";
-            document.getElementById('status-text').innerText = "Execute o script dentro do Roblox para gerar o link correto.";
-        }
-
-        // Função do botão de copiar
         function copiarKey() {
-            if (chaveGerada) {
-                navigator.clipboard.writeText(chaveGerada).then(() => {
-                    const btn = document.querySelector('.btn-copy');
-                    btn.innerText = "✅ Copiado!";
-                    btn.style.backgroundColor = "#10b981";
-                    btn.style.color = "#ffffff";
-                    
-                    setTimeout(() => {
-                        btn.innerText = "📋 Copiar Key";
-                        btn.style.backgroundColor = "#f59e0b";
-                        btn.style.color = "#000000";
-                    }, 2000);
-                });
-            }
+            navigator.clipboard.writeText(chaveGerada).then(() => {
+                const btn = document.querySelector('.btn-copy');
+                btn.innerText = "✅ Copiado!";
+                btn.style.backgroundColor = "#10b981";
+                btn.style.color = "#ffffff";
+                
+                setTimeout(() => {
+                    btn.innerText = "📋 Copiar Key";
+                    btn.style.backgroundColor = "#f59e0b";
+                    btn.style.color = "#000000";
+                }, 2000);
+            });
         }
     </script>
 
 </body>
 </html>
+
