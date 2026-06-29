@@ -97,7 +97,7 @@
         <div class="logo">📁 d10 Hub</div>
         <p class="subtitle">Cole esta chave no jogo para liberar o script!</p>
         
-        <!-- A chave aparece aqui direto -->
+        <!-- A chave embaralhada aparece aqui direto -->
         <div class="key-box" id="key-display">Gerando Key...</div>
         
         <button class="btn-copy" onclick="copiarKey()">📋 Copiar Key</button>
@@ -106,16 +106,21 @@
     </div>
 
     <script>
-        // Sistema simplificado baseado apenas na data do calendário
+        // Pega o dia e mês atual do sistema
         const data = new Date();
-        const dia = String(data.getDate()).padStart(2, '0');
-        const mes = String(data.getMonth() + 1).padStart(2, '0');
-        const dataFormatada = dia + mes;
+        const dia = data.getDate();
+        const mes = data.getMonth() + 1;
 
-        // Chave estática diária idêntica à do script
-        const chaveGerada = `d10_key_${dataFormatada}`;
+        // FÓRMULA MATEMÁTICA DE EMBARALHAMENTO (Sem ID)
+        const calculoSecreto = (dia * 357) + (mes * 812) + 4000;
+        
+        // Transforma o número resultante em Hexadecimal e joga para Letras Maiúsculas
+        const hashTexto = calculoSecreto.toString(16).toUpperCase();
 
-        // Exibe direto na tela
+        // Formato final da chave ultra-segura
+        const chaveGerada = `d10_sh_${hashTexto}_hub`;
+
+        // Exibe direto no elemento visual do site
         document.getElementById('key-display').innerText = chaveGerada;
 
         function copiarKey() {
