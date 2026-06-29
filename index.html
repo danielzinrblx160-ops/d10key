@@ -2,43 +2,153 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Key Generator - d10 Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>d10 Hub - Key System</title>
     <style>
-        body { background-color: #0c0c0d; color: #ffffff; font-family: 'Segoe UI', Arial, sans-serif; text-align: center; padding-top: 80px; }
-        .box { background-color: #131316; border: 1px solid #36175e; display: inline-block; padding: 30px; border-radius: 12px; box-shadow: 0px 0px 20px rgba(138, 43, 226, 0.2); }
-        .key { font-size: 22px; font-weight: bold; color: #a020f0; margin: 20px 0; padding: 10px; background: #1c1c24; border-radius: 6px; border: 1px dashed #8a2be2; letter-spacing: 1px; }
-        .footer-text { color: #5c5c6d; font-size: 12px; margin-top: 15px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f0f12;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #17171f;
+            border: 1px solid #262633;
+            border-radius: 12px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .subtitle {
+            color: #71717a;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .key-box {
+            background-color: #0f0f12;
+            border: 1px solid #262633;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #f59e0b; /* Cor laranja idêntica à foto */
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            word-break: break-all;
+        }
+
+        .btn-copy {
+            background-color: #f59e0b;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-copy:hover {
+            background-color: #d97706;
+        }
+
+        .footer-text {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 16px;
+        }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2>🔑 Gerador de Chaves d10 Hub</h2>
-        <p>Sua chave exclusiva foi gerada com sucesso e expira em 24h:</p>
-        <div class="key" id="key-box">Buscando ID...</div>
-        <p class="footer-text">Esta chave só funciona na sua conta do Roblox.</p>
+
+    <div class="container">
+        <div class="logo">📁 d10 Hub</div>
+        <p class="subtitle">Cole esta chave no jogo para liberar o script!</p>
+        
+        <!-- Onde a chave vai aparecer -->
+        <div class="key-box" id="key-display">Buscando ID...</div>
+        
+        <!-- Botão de copiar -->
+        <button class="btn-copy" onclick="copiarKey()">📋 Copiar Key</button>
+        
+        <p class="footer-text" id="status-text">Esta chave expira em 24h.</p>
     </div>
 
     <script>
-        // Função para pegar o ID enviado pelo link
+        // Pega o ?userid= que o Linkvertise envia na URL
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('userid');
+        let chaveGerada = "";
 
         if (userId) {
-            // Pega a data de hoje (Fuso local)
+            // Pega a data atual (Dia e Mês)
             const data = new Date();
             const dia = String(data.getDate()).padStart(2, '0');
             const mes = String(data.getMonth() + 1).padStart(2, '0');
             const dataFormatada = dia + mes;
 
-            // Faz a mesma conta matemática secreta do script
+            // Faz o mesmo cálculo matemático que o script do Roblox faz
             const contaSecreta = (parseInt(userId) * 2) + 500;
-            
-            // Exibe a chave na tela
-            document.getElementById("key-box").innerText = `d10_${contaSecreta}_${dataFormatada}`;
+            chaveGerada = `d10_${contaSecreta}_${dataFormatada}`;
+
+            // Mostra a chave na tela
+            document.getElementById('key-display').innerText = chaveGerada;
         } else {
-            document.getElementById("key-box").innerText = "Erro: Execute o script pelo Roblox para gerar a key.";
-            document.getElementById("key-box").style.color = "#ff3333";
+            document.getElementById('key-display').innerText = "Erro: Sem ID!";
+            document.getElementById('key-display').style.color = "#ef4444";
+            document.getElementById('status-text').innerText = "Execute o script dentro do Roblox para gerar o link correto.";
+        }
+
+        // Função do botão de copiar
+        function copiarKey() {
+            if (chaveGerada) {
+                navigator.clipboard.writeText(chaveGerada).then(() => {
+                    const btn = document.querySelector('.btn-copy');
+                    btn.innerText = "✅ Copiado!";
+                    btn.style.backgroundColor = "#10b981";
+                    btn.style.color = "#ffffff";
+                    
+                    setTimeout(() => {
+                        btn.innerText = "📋 Copiar Key";
+                        btn.style.backgroundColor = "#f59e0b";
+                        btn.style.color = "#000000";
+                    }, 2000);
+                });
+            }
         }
     </script>
+
 </body>
 </html>
